@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المتجر الإلكتروني الاحترافي</title>
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: #f4f6f9; margin: 0; padding: 15px; direction: rtl; }
+    .container { max-width: 480px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    h2, h3 { text-align: center; color: #2d3748; margin-bottom: 15px; }
+    .product-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; }
+    .product-card img { max-width: 100%; border-radius: 6px; }
+    .price { font-size: 1.25rem; font-weight: bold; color: #2b6cb0; margin: 8px 0; }
+    .form-group { margin-bottom: 14px; text-align: right; }
+    label { font-size: 0.9rem; font-weight: 600; color: #4a5568; display: block; margin-bottom: 5px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; }
+    .summary { background: #edf2f7; padding: 12px; border-radius: 6px; margin: 15px 0; font-size: 0.95rem; }
+    .btn-submit { width: 100%; background: #276749; color: white; border: none; padding: 14px; font-size: 1.1rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-submit:hover { background: #22543d; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>متجرنا الإلكتروني</h2>
+  
+  <div class="product-card">
+    <img src="https://via.placeholder.com/300x200" alt="المنتج">
+    <h3 id="p-name">جاري التحميل...</h3>
+    <div class="price" id="p-price">0 د.ج</div>
+  </div>
+
+  <form id="orderForm">
+    <h3>استمارة الطلب والتوصيل</h3>
+    
+    <div class="form-group">
+      <label>الاسم الكامل</label>
+      <input type="text" id="fullname" required placeholder="مثال: زكرياء">
+    </div>
+
+    <div class="form-group">
+      <label>رقم الهاتف</label>
+      <input type="tel" id="phone" required placeholder="06XXXXXXXX">
+    </div>
+
+    <div class="form-group">
+      <label>الولاية</label>
+      <select id="wilaya" required onchange="updateShipping()">
+        <option value="">اختر الولاية...</option>
+        <option value="16">16 - الجزائر</option>
+        <option value="23">23 - عنابة</option>
+        <option value="31">31 - وهران</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>نوع التوصيل</label>
+      <select id="shippingType" required onchange="updateShipping()">
+        <option value="desk">توصيل إلى المكتب (Stop Desk)</option>
+        <option value="home">توصيل إلى المنزل (Home)</option>
+      </select>
+    </div>
+
+    <div class="summary">
+      <div>سعر المنتج: <span id="sum-price">0</span> د.ج</div>
+      <div>شحن الولاية: <span id="sum-shipping">0</span> د.ج</div>
+      <hr>
+      <strong>المجموع الكلي: <span id="sum-total">0</span> د.ج</strong>
+    </div>
+
+    <button type="submit" class="btn-submit">تأكيد الطلب الآن</button>
+  </form>
+</div>
+
+<script>
+  let productPrice = 4500;
+  const rates = {
+    "16": { desk: 400, home: 600 },
+    "23": { desk: 300, home: 500 },
+    "31": { desk: 450, home: 700 }
+  };
+
+  document.getElementById('p-name').innerText = "سجادة غرف نوم يدوية الصنع";
+  document.getElementById('p-price').innerText = productPrice + " د.ج";
+  document.getElementById('sum-price').innerText = productPrice;
+
+  function updateShipping() {
+    const wilaya = document.getElementById('wilaya').value;
+    const type = document.getElementById('shippingType').value;
+    let shippingCost = 0;
+
+    if (wilaya && rates[wilaya]) {
+      shippingCost = rates[wilaya][type];
+    }
+
+    document.getElementById('sum-shipping').innerText = shippingCost;
+    document.getElementById('sum-total').innerText = productPrice + shippingCost;
+  }
+
+  document.getElementById('orderForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const botToken = "ضع_TOKEN_البوت_هنا";
+    const chatId = "ضع_ID_حسابك_هنا";
+
+    const name = document.getElementById('fullname').value;
+    const phone = document.getElementById('phone').value;
+    const wilaya = document.getElementById('wilaya').options[document.getElementById('wilaya').selectedIndex].text;
+    const shippingType = document.getElementById('shippingType').options[document.getElementById('shippingType').selectedIndex].text;
+    const total = document.getElementById('sum-total').innerText;
+
+    const message = `🛍️ *طلب جديد من المتجر!*%0A%0A` +
+      `👤 *الزبون:* ${name}%0A` +
+      `📞 *الهاتف:* ${phone}%0A` +
+      `📍 *الولاية:* ${wilaya}%0A` +
+      `🚚 *نوع الشحن:* ${shippingType}%0A` +
+      `💰 *الإجمالي:* ${total} د.ج`;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`)
+      .then(res => {
+        alert('تم إرسال طلبك بنجاح! سنتصل بك قريباً.');
+        document.getElementById('orderForm').reset();
+        updateShipping();
+      })
+      .catch(err => alert('حدث خطأ أثناء إرسال الطلب.'));
+  });
+</script>
+
+</body>
+</html>
