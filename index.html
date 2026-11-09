@@ -3,96 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BootMarket - المتجر الرقمي</title>
+    <title>BootMarket - المتجر الرسمي</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --accent: #f59e0b;
+            --primary: #0f172a;
+            --accent: #2563eb;
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
+            --success: #10b981;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 50px; }
-        header { background: var(--card-bg); box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
-        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-        .store-header { text-align: center; margin-bottom: 2rem; }
-        .store-header h1 { font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem; }
-        .store-header p { color: var(--text-muted); }
-        .product-card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 2rem; display: flex; flex-direction: column; }
-        @media(min-width: 640px) { .product-card { flex-direction: row; } }
-        .product-img { width: 100%; height: 250px; object-fit: cover; background: #e2e8f0; }
-        @media(min-width: 640px) { .product-img { width: 45%; height: auto; } }
-        .product-info { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .product-price { font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem; }
-        .options-group { margin-bottom: 1rem; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 60px; }
+        header { background: var(--card-bg); box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .store-header { text-align: center; margin-bottom: 2.5rem; }
+        .store-header h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 800; }
+        .store-header p { color: var(--text-muted); font-size: 1.05rem; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+        .product-card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+        .product-card.selected-product { border: 2px solid var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+        .product-img { width: 100%; height: 220px; object-fit: cover; background: #f1f5f9; }
+        .product-info { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .product-price { font-size: 1.2rem; font-weight: 800; color: var(--accent); margin-bottom: 1rem; }
+        
+        .options-group { margin-top: 0.5rem; margin-bottom: 1rem; }
         .options-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); }
         .color-options { display: flex; gap: 0.5rem; }
-        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
-        .color-dot.selected { border-color: var(--text-main); transform: scale(1.1); }
-        form { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        form h3 { margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
-        .form-control { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.2s; }
-        .form-control:focus { border-color: var(--primary); }
-        .summary-box { background: #f1f5f9; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem; }
-        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-        .summary-row.total { font-weight: 800; font-size: 1.1rem; border-top: 1px solid var(--border); padding-top: 0.5rem; color: var(--primary); }
-        .btn-submit { background: var(--primary); color: white; border: none; width: 100%; padding: 0.9rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-        .btn-submit:hover { background: var(--primary-dark); }
-        #success-msg { display: none; text-align: center; background: #d1fae5; color: #065f46; padding: 1.5rem; border-radius: 12px; font-weight: 700; margin-top: 1rem; }
+        .color-dot { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid var(--border); transition: transform 0.2s; }
+        .color-dot.selected { border-color: var(--primary); transform: scale(1.15); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+        form { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        form h3 { margin-bottom: 1.5rem; font-size: 1.2rem; border-bottom: 2px solid var(--border); padding-bottom: 0.75rem; color: var(--primary); }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .form-control { width: 100%; padding: 0.85rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; background: #fff; transition: border-color 0.2s; }
+        .form-control:focus { border-color: var(--accent); }
+        
+        .summary-box { background: #f8fafc; border: 1px solid var(--border); padding: 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; }
+        .summary-row.total { font-weight: 800; font-size: 1.2rem; border-top: 1px solid var(--border); padding-top: 0.75rem; color: var(--accent); }
+        
+        .btn-submit { background: var(--accent); color: white; border: none; width: 100%; padding: 1rem; border-radius: 10px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-submit:hover { background: #1d4ed8; }
+        #success-msg { display: none; text-align: center; background: #d1fae5; color: #065f46; padding: 2rem; border-radius: 16px; font-weight: 700; margin-top: 1rem; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo" id="store-name">BootMarket</div>
-        <div style="font-size: 0.9rem; color: var(--text-muted);">التوصيل متوفر لكل الولاية</div>
+        <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">خدمة التوصيل السريع متوفرة</div>
     </header>
 
     <div class="container">
         <div class="store-header">
-            <h1 id="main-heading">متجر BootMarket الرسمي</h1>
-            <p>اطلب منتجك المفضل بكل سهولة وصله لدارك</p>
+            <h1 id="main-heading">متجر BootMarket</h1>
+            <p>اختر منتجك المفضل، حدد اللون ومكان الاستلام، وسنتكفل بالباقي</p>
         </div>
 
-        <div id="product-container"></div>
+        <h3 style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 700;">1. اختر المنتج المطلوب:</h3>
+        <div id="products-container" class="products-grid"></div>
 
         <form id="order-form" onsubmit="submitOrder(event)">
-            <h3>معلومات التوصيل</h3>
+            <h3>2. معلومات التوصيل وإتمام الطلب</h3>
             
             <div class="form-group">
-                <label>الاسم الكامل</label>
-                <input type="text" id="client-name" class="form-control" required placeholder="أدخل اسمك الكريم">
+                <label>الاسم واللقب</label>
+                <input type="text" id="client-name" class="form-control" required placeholder="أدخل اسمك الكامل">
             </div>
 
             <div class="form-group">
                 <label>رقم الهاتف</label>
-                <input type="tel" id="client-phone" class="form-control" required placeholder="06XXXXXXXX">
+                <input type="tel" id="client-phone" class="form-control" required placeholder="06XXXXXXXX / 07XXXXXXXX">
             </div>
 
             <div class="form-group">
                 <label>الولاية</label>
                 <select id="wilaya-select" class="form-control" onchange="updateSummary()" required>
-                    <option value="">اختر الولاية</option>
+                    <option value="">اختر ولايتك</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>طريقة التوصيل</label>
+                <label>نوع التوصيل</label>
                 <select id="delivery-type" class="form-control" onchange="updateSummary()">
-                    <option value="home">توصيل للمنزل</option>
-                    <option value="desk">توصيل للمكتب (البيرُو)</option>
+                    <option value="home">توصيل للمنزل (إلى غاية باب البيت)</option>
+                    <option value="desk">توصيل للمكتب (استلام من شركة التوصيل)</option>
                 </select>
             </div>
 
             <div class="summary-box">
+                <div class="summary-row">
+                    <span>المنتج المختار:</span>
+                    <span id="selected-product-name" style="font-weight: 600;">-</span>
+                </div>
                 <div class="summary-row">
                     <span>سعر المنتج:</span>
                     <span id="product-price-val">0 دج</span>
@@ -107,15 +118,25 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-submit">تأكيد الطلب الآن</button>
+            <button type="submit" class="btn-submit">تأكيد وإرسال الطلب الآن</button>
         </form>
 
-        <div id="success-msg">تم إرسال طلبك بنجاح! سنتصل بك قريباً لتأكيد التوصيل.</div>
+        <div id="success-msg">تم إرسال طلبك بنجاح! شكراً لثقتك بـ BootMarket، سنتصل بك قريباً لتأكيد التوصيل.</div>
     </div>
 
     <script>
         let storeData = {};
+        let selectedProduct = null;
         let selectedColor = '';
+
+        const wilayasList = {
+            "01": "أدرار", "02": "الشلف", "03": "الأغواط", "04": "أم البواقي", "05": "باتنة", "06": "بجاية", "07": "بسكرة", "08": "بشار", "09": "البليدة", "10": "البويرة",
+            "11": "تمنراست", "12": "تبسة", "13": "تلمسان", "14": "تيارت", "15": "تيزي وزو", "16": "الجزائر", "17": "الجلفة", "18": "جيجل", "19": "سطيف", "20": "سعيدة",
+            "21": "سكيكدة", "22": "سيدي بلعباس", "23": "عنابة", "24": "قالمة", "25": "قسنطينة", "26": "المدية", "27": "مستغانم", "28": "المسيلة", "29": "معسكر", "30": "ورقلة",
+            "31": "وهران", "32": "البيض", "33": "إليزي", "34": "برج بوعريريج", "35": "بومرداس", "36": "الطارف", "37": "تندوف", "38": "تيسمسيلت", "39": "الوادي", "40": "خنشلة",
+            "41": "سوق أهراس", "42": "تيبازة", "43": "ميلة", "44": "عين الدفلى", "45": "عامرة", "46": "عين تيموشنت", "47": "غرداية", "48": "غليزان", "49": "المغير", "50": "المناعة",
+            "51": "اولاد جلال", "52": "بني عباس", "53": "إن صالح", "54": "إن قزام", "55": "تقرت", "56": "جانت", "57": "المغير", "58": "منيعة"
+        };
 
         async function initStore() {
             try {
@@ -123,31 +144,46 @@
                 storeData = await res.json();
                 
                 document.getElementById('store-name').innerText = storeData.store_info.name;
-                document.getElementById('main-heading').innerText = "مرحباً بك في " + storeData.store_info.name;
+                document.getElementById('main-heading').innerText = "متجر " + storeData.store_info.name;
                 
-                renderProducts();
                 populateWilayas();
+                renderProducts();
             } catch (err) {
                 console.error("Error loading store data", err);
             }
         }
 
+        function populateWilayas() {
+            const select = document.getElementById('wilaya-select');
+            for (const code in wilayasList) {
+                const option = document.createElement('option');
+                option.value = code;
+                option.text = `${code} - ${wilayasList[code]}`;
+                select.appendChild(option);
+            }
+        }
+
         function renderProducts() {
-            const container = document.getElementById('product-container');
+            const container = document.getElementById('products-container');
             container.innerHTML = '';
 
-            storeData.products.forEach(product => {
+            storeData.products.forEach((product, index) => {
+                const isSelected = selectedProduct === null && index === 0;
+                if (isSelected || selectedProduct === null) {
+                    selectedProduct = product;
+                    if (product.colors && product.colors.length > 0) selectedColor = product.colors[0];
+                }
+
                 let colorsHtml = '';
                 if (product.colors && product.colors.length > 0) {
-                    selectedColor = product.colors[0];
                     colorsHtml = `
-                        <div class="options-group">
+                        <div class="options-group" onclick="event.stopPropagation()">
                             <label>اختر اللون:</label>
-                            <div class="color-options" id="color-picker">
-                                ${product.colors.map((c, idx) => `
-                                    <div class="color-dot ${idx === 0 ? 'selected' : ''}" 
+                            <div class="color-options">
+                                ${product.colors.map((c, cIdx) => `
+                                    <div class="color-dot ${(selectedProduct.id === product.id && c === selectedColor) ? 'selected' : ''}" 
                                          style="background-color: ${c};" 
-                                         onclick="selectColor('${c}', this)">
+                                         onclick="selectColor(${product.id}, '${c}', event)">
                                     </div>
                                 `).join('')}
                             </div>
@@ -155,8 +191,10 @@
                     `;
                 }
 
+                const cardSelectedClass = (selectedProduct.id === product.id) ? 'selected-product' : '';
+
                 container.innerHTML += `
-                    <div class="product-card" data-price="${product.price}">
+                    <div class="product-card ${cardSelectedClass}" onclick="selectProduct(${product.id})">
                         <img src="${product.image}" class="product-img" alt="${product.name}">
                         <div class="product-info">
                             <div>
@@ -171,35 +209,40 @@
             updateSummary();
         }
 
-        function selectColor(color, element) {
-            selectedColor = color;
-            document.querySelectorAll('.color-dot').forEach(el => el.classList.remove('selected'));
-            element.classList.add('selected');
+        function selectProduct(id) {
+            selectedProduct = storeData.products.find(p => p.id === id);
+            if (selectedProduct.colors && selectedProduct.colors.length > 0) {
+                selectedColor = selectedProduct.colors[0];
+            } else {
+                selectedColor = 'افتراضي';
+            }
+            renderProducts();
         }
 
-        function populateWilayas() {
-            const select = document.getElementById('wilaya-select');
-            for (const wilayaCode in storeData.shipping_rates) {
-                const option = document.createElement('option');
-                option.value = wilayaCode;
-                option.text = `ولاية رقم ${wilayaCode}`;
-                select.appendChild(option);
-            }
+        function selectColor(productId, color, event) {
+            event.stopPropagation();
+            selectedProduct = storeData.products.find(p => p.id === id);
+            selectedColor = color;
+            renderProducts();
         }
 
         function updateSummary() {
-            const product = storeData.products[0];
+            if (!selectedProduct) return;
+
             const wilayaCode = document.getElementById('wilaya-select').value;
             const deliveryType = document.getElementById('delivery-type').value;
 
             let shippingCost = 0;
             if (wilayaCode && storeData.shipping_rates[wilayaCode]) {
-                shippingCost = storeData.shipping_rates[wilayaCode][deliveryType] || 0;
+                shippingCost = storeData.shipping_rates[wilayaCode][deliveryType] || 400; // السعر الافتراضي للتوصيل إن لم يُحدد
+            } else if (wilayaCode) {
+                shippingCost = deliveryType === 'home' ? 600 : 400; // تسعيرة عامة في حال لم تُذكر بالصراحة في الـ JSON
             }
 
-            const productPrice = product ? product.price : 0;
+            const productPrice = selectedProduct.price;
             const total = productPrice + shippingCost;
 
+            document.getElementById('selected-product-name').innerText = selectedProduct.name + (selectedColor ? ` (${selectedColor})` : '');
             document.getElementById('product-price-val').innerText = productPrice.toLocaleString() + ' دج';
             document.getElementById('shipping-price-val').innerText = shippingCost.toLocaleString() + ' دج';
             document.getElementById('total-price-val').innerText = total.toLocaleString() + ' دج';
@@ -210,23 +253,22 @@
 
             const name = document.getElementById('client-name').value;
             const phone = document.getElementById('client-phone').value;
-            const wilaya = document.getElementById('wilaya-select').value;
+            const wilayaCode = document.getElementById('wilaya-select').value;
             const deliveryType = document.getElementById('delivery-type').value;
-            const product = storeData.products[0];
 
-            const wilayaText = document.getElementById('wilaya-select').options[document.getElementById('wilaya-select').selectedIndex].text;
+            const wilayaName = wilayasList[wilayaCode] || wilayaCode;
             const deliveryText = deliveryType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب';
 
-            let shippingCost = storeData.shipping_rates[wilaya][deliveryType];
-            let total = product.price + shippingCost;
+            let shippingCost = (storeData.shipping_rates[wilayaCode] && storeData.shipping_rates[wilayaCode][deliveryType]) || (deliveryType === 'home' ? 600 : 400);
+            let total = selectedProduct.price + shippingCost;
 
             const text = `🚨 *طلب جديد عبر BootMarket* 🚨\n\n` +
-                         `📦 *المنتج:* ${product.name}\n` +
-                         `🎨 *اللون المختار:* ${selectedColor}\n` +
+                         `📦 *المنتج:* ${selectedProduct.name}\n` +
+                         `🎨 *اللون:* ${selectedColor}\n` +
                          `👤 *الاسم:* ${name}\n` +
                          `📞 *الهاتف:* ${phone}\n` +
-                         `📍 *الولاية:* ${wilayaText}\n` +
-                         `🚚 *النوع:* ${deliveryText}\n` +
+                         `📍 *الولاية:* ${wilayaCode} - ${wilayaName}\n` +
+                         `🚚 *التوصيل:* ${deliveryText}\n` +
                          `💰 *المجموع:* ${total.toLocaleString()} دج`;
 
             const token = storeData.store_info.telegram_bot_token;
@@ -247,7 +289,7 @@
                     document.getElementById('order-form').style.display = 'none';
                     document.getElementById('success-msg').style.display = 'block';
                 } else {
-                    alert('حدث خطأ أثناء إرسال الطلب، تأكد من إعدادات البوت.');
+                    alert('حدث خطأ أثناء الإرسال، تحقق من توكن البوت في products.json');
                 }
             } catch (err) {
                 alert('خطأ في الاتصال بالشبكة.');
