@@ -1,131 +1,260 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المتجر الإلكتروني الاحترافي</title>
-  <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: #f4f6f9; margin: 0; padding: 15px; direction: rtl; }
-    .container { max-width: 480px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    h2, h3 { text-align: center; color: #2d3748; margin-bottom: 15px; }
-    .product-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; }
-    .product-card img { max-width: 100%; border-radius: 6px; }
-    .price { font-size: 1.25rem; font-weight: bold; color: #2b6cb0; margin: 8px 0; }
-    .form-group { margin-bottom: 14px; text-align: right; }
-    label { font-size: 0.9rem; font-weight: 600; color: #4a5568; display: block; margin-bottom: 5px; }
-    input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; }
-    .summary { background: #edf2f7; padding: 12px; border-radius: 6px; margin: 15px 0; font-size: 0.95rem; }
-    .btn-submit { width: 100%; background: #276749; color: white; border: none; padding: 14px; font-size: 1.1rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    .btn-submit:hover { background: #22543d; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BootMarket - المتجر الرقمي</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 50px; }
+        header { background: var(--card-bg); box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .store-header { text-align: center; margin-bottom: 2rem; }
+        .store-header h1 { font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem; }
+        .store-header p { color: var(--text-muted); }
+        .product-card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 2rem; display: flex; flex-direction: column; }
+        @media(min-width: 640px) { .product-card { flex-direction: row; } }
+        .product-img { width: 100%; height: 250px; object-fit: cover; background: #e2e8f0; }
+        @media(min-width: 640px) { .product-img { width: 45%; height: auto; } }
+        .product-info { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .product-price { font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem; }
+        .options-group { margin-bottom: 1rem; }
+        .options-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-muted); }
+        .color-options { display: flex; gap: 0.5rem; }
+        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
+        .color-dot.selected { border-color: var(--text-main); transform: scale(1.1); }
+        form { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        form h3 { margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .form-control { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+        .form-control:focus { border-color: var(--primary); }
+        .summary-box { background: #f1f5f9; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .summary-row.total { font-weight: 800; font-size: 1.1rem; border-top: 1px solid var(--border); padding-top: 0.5rem; color: var(--primary); }
+        .btn-submit { background: var(--primary); color: white; border: none; width: 100%; padding: 0.9rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-submit:hover { background: var(--primary-dark); }
+        #success-msg { display: none; text-align: center; background: #d1fae5; color: #065f46; padding: 1.5rem; border-radius: 12px; font-weight: 700; margin-top: 1rem; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <h2>متجرنا الإلكتروني</h2>
-  
-  <div class="product-card">
-    <img src="https://via.placeholder.com/300x200" alt="المنتج">
-    <h3 id="p-name">جاري التحميل...</h3>
-    <div class="price" id="p-price">0 د.ج</div>
-  </div>
+    <header>
+        <div class="logo" id="store-name">BootMarket</div>
+        <div style="font-size: 0.9rem; color: var(--text-muted);">التوصيل متوفر لكل الولاية</div>
+    </header>
 
-  <form id="orderForm">
-    <h3>استمارة الطلب والتوصيل</h3>
-    
-    <div class="form-group">
-      <label>الاسم الكامل</label>
-      <input type="text" id="fullname" required placeholder="مثال: زكرياء">
+    <div class="container">
+        <div class="store-header">
+            <h1 id="main-heading">متجر BootMarket الرسمي</h1>
+            <p>اطلب منتجك المفضل بكل سهولة وصله لدارك</p>
+        </div>
+
+        <div id="product-container"></div>
+
+        <form id="order-form" onsubmit="submitOrder(event)">
+            <h3>معلومات التوصيل</h3>
+            
+            <div class="form-group">
+                <label>الاسم الكامل</label>
+                <input type="text" id="client-name" class="form-control" required placeholder="أدخل اسمك الكريم">
+            </div>
+
+            <div class="form-group">
+                <label>رقم الهاتف</label>
+                <input type="tel" id="client-phone" class="form-control" required placeholder="06XXXXXXXX">
+            </div>
+
+            <div class="form-group">
+                <label>الولاية</label>
+                <select id="wilaya-select" class="form-control" onchange="updateSummary()" required>
+                    <option value="">اختر الولاية</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>طريقة التوصيل</label>
+                <select id="delivery-type" class="form-control" onchange="updateSummary()">
+                    <option value="home">توصيل للمنزل</option>
+                    <option value="desk">توصيل للمكتب (البيرُو)</option>
+                </select>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>سعر المنتج:</span>
+                    <span id="product-price-val">0 دج</span>
+                </div>
+                <div class="summary-row">
+                    <span>سعر التوصيل:</span>
+                    <span id="shipping-price-val">0 دج</span>
+                </div>
+                <div class="summary-row total">
+                    <span>المجموع الإجمالي:</span>
+                    <span id="total-price-val">0 دج</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">تأكيد الطلب الآن</button>
+        </form>
+
+        <div id="success-msg">تم إرسال طلبك بنجاح! سنتصل بك قريباً لتأكيد التوصيل.</div>
     </div>
 
-    <div class="form-group">
-      <label>رقم الهاتف</label>
-      <input type="tel" id="phone" required placeholder="06XXXXXXXX">
-    </div>
+    <script>
+        let storeData = {};
+        let selectedColor = '';
 
-    <div class="form-group">
-      <label>الولاية</label>
-      <select id="wilaya" required onchange="updateShipping()">
-        <option value="">اختر الولاية...</option>
-        <option value="16">16 - الجزائر</option>
-        <option value="23">23 - عنابة</option>
-        <option value="31">31 - وهران</option>
-      </select>
-    </div>
+        async function initStore() {
+            try {
+                const res = await fetch('products.json');
+                storeData = await res.json();
+                
+                document.getElementById('store-name').innerText = storeData.store_info.name;
+                document.getElementById('main-heading').innerText = "مرحباً بك في " + storeData.store_info.name;
+                
+                renderProducts();
+                populateWilayas();
+            } catch (err) {
+                console.error("Error loading store data", err);
+            }
+        }
 
-    <div class="form-group">
-      <label>نوع التوصيل</label>
-      <select id="shippingType" required onchange="updateShipping()">
-        <option value="desk">توصيل إلى المكتب (Stop Desk)</option>
-        <option value="home">توصيل إلى المنزل (Home)</option>
-      </select>
-    </div>
+        function renderProducts() {
+            const container = document.getElementById('product-container');
+            container.innerHTML = '';
 
-    <div class="summary">
-      <div>سعر المنتج: <span id="sum-price">0</span> د.ج</div>
-      <div>شحن الولاية: <span id="sum-shipping">0</span> د.ج</div>
-      <hr>
-      <strong>المجموع الكلي: <span id="sum-total">0</span> د.ج</strong>
-    </div>
+            storeData.products.forEach(product => {
+                let colorsHtml = '';
+                if (product.colors && product.colors.length > 0) {
+                    selectedColor = product.colors[0];
+                    colorsHtml = `
+                        <div class="options-group">
+                            <label>اختر اللون:</label>
+                            <div class="color-options" id="color-picker">
+                                ${product.colors.map((c, idx) => `
+                                    <div class="color-dot ${idx === 0 ? 'selected' : ''}" 
+                                         style="background-color: ${c};" 
+                                         onclick="selectColor('${c}', this)">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
 
-    <button type="submit" class="btn-submit">تأكيد الطلب الآن</button>
-  </form>
-</div>
+                container.innerHTML += `
+                    <div class="product-card" data-price="${product.price}">
+                        <img src="${product.image}" class="product-img" alt="${product.name}">
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">${product.name}</div>
+                                <div class="product-price">${product.price.toLocaleString()} دج</div>
+                                ${colorsHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            updateSummary();
+        }
 
-<script>
-  let productPrice = 4500;
-  const rates = {
-    "16": { desk: 400, home: 600 },
-    "23": { desk: 300, home: 500 },
-    "31": { desk: 450, home: 700 }
-  };
+        function selectColor(color, element) {
+            selectedColor = color;
+            document.querySelectorAll('.color-dot').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
 
-  document.getElementById('p-name').innerText = "سجادة غرف نوم يدوية الصنع";
-  document.getElementById('p-price').innerText = productPrice + " د.ج";
-  document.getElementById('sum-price').innerText = productPrice;
+        function populateWilayas() {
+            const select = document.getElementById('wilaya-select');
+            for (const wilayaCode in storeData.shipping_rates) {
+                const option = document.createElement('option');
+                option.value = wilayaCode;
+                option.text = `ولاية رقم ${wilayaCode}`;
+                select.appendChild(option);
+            }
+        }
 
-  function updateShipping() {
-    const wilaya = document.getElementById('wilaya').value;
-    const type = document.getElementById('shippingType').value;
-    let shippingCost = 0;
+        function updateSummary() {
+            const product = storeData.products[0];
+            const wilayaCode = document.getElementById('wilaya-select').value;
+            const deliveryType = document.getElementById('delivery-type').value;
 
-    if (wilaya && rates[wilaya]) {
-      shippingCost = rates[wilaya][type];
-    }
+            let shippingCost = 0;
+            if (wilayaCode && storeData.shipping_rates[wilayaCode]) {
+                shippingCost = storeData.shipping_rates[wilayaCode][deliveryType] || 0;
+            }
 
-    document.getElementById('sum-shipping').innerText = shippingCost;
-    document.getElementById('sum-total').innerText = productPrice + shippingCost;
-  }
+            const productPrice = product ? product.price : 0;
+            const total = productPrice + shippingCost;
 
-  document.getElementById('orderForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const botToken = "ضع_TOKEN_البوت_هنا";
-    const chatId = "ضع_ID_حسابك_هنا";
+            document.getElementById('product-price-val').innerText = productPrice.toLocaleString() + ' دج';
+            document.getElementById('shipping-price-val').innerText = shippingCost.toLocaleString() + ' دج';
+            document.getElementById('total-price-val').innerText = total.toLocaleString() + ' دج';
+        }
 
-    const name = document.getElementById('fullname').value;
-    const phone = document.getElementById('phone').value;
-    const wilaya = document.getElementById('wilaya').options[document.getElementById('wilaya').selectedIndex].text;
-    const shippingType = document.getElementById('shippingType').options[document.getElementById('shippingType').selectedIndex].text;
-    const total = document.getElementById('sum-total').innerText;
+        async function submitOrder(e) {
+            e.preventDefault();
 
-    const message = `🛍️ *طلب جديد من المتجر!*%0A%0A` +
-      `👤 *الزبون:* ${name}%0A` +
-      `📞 *الهاتف:* ${phone}%0A` +
-      `📍 *الولاية:* ${wilaya}%0A` +
-      `🚚 *نوع الشحن:* ${shippingType}%0A` +
-      `💰 *الإجمالي:* ${total} د.ج`;
+            const name = document.getElementById('client-name').value;
+            const phone = document.getElementById('client-phone').value;
+            const wilaya = document.getElementById('wilaya-select').value;
+            const deliveryType = document.getElementById('delivery-type').value;
+            const product = storeData.products[0];
 
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`)
-      .then(res => {
-        alert('تم إرسال طلبك بنجاح! سنتصل بك قريباً.');
-        document.getElementById('orderForm').reset();
-        updateShipping();
-      })
-      .catch(err => alert('حدث خطأ أثناء إرسال الطلب.'));
-  });
-</script>
+            const wilayaText = document.getElementById('wilaya-select').options[document.getElementById('wilaya-select').selectedIndex].text;
+            const deliveryText = deliveryType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب';
 
+            let shippingCost = storeData.shipping_rates[wilaya][deliveryType];
+            let total = product.price + shippingCost;
+
+            const text = `🚨 *طلب جديد عبر BootMarket* 🚨\n\n` +
+                         `📦 *المنتج:* ${product.name}\n` +
+                         `🎨 *اللون المختار:* ${selectedColor}\n` +
+                         `👤 *الاسم:* ${name}\n` +
+                         `📞 *الهاتف:* ${phone}\n` +
+                         `📍 *الولاية:* ${wilayaText}\n` +
+                         `🚚 *النوع:* ${deliveryText}\n` +
+                         `💰 *المجموع:* ${total.toLocaleString()} دج`;
+
+            const token = storeData.store_info.telegram_bot_token;
+            const chatId = storeData.store_info.telegram_chat_id;
+
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: text,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                if (res.ok) {
+                    document.getElementById('order-form').style.display = 'none';
+                    document.getElementById('success-msg').style.display = 'block';
+                } else {
+                    alert('حدث خطأ أثناء إرسال الطلب، تأكد من إعدادات البوت.');
+                }
+            } catch (err) {
+                alert('خطأ في الاتصال بالشبكة.');
+            }
+        }
+
+        initStore();
+    </script>
 </body>
 </html>
